@@ -91,6 +91,7 @@
             <td class="noBorder"></td>
             <td class="noBorder"></td>
             <td class="noBorder" id="ratio" style="font-weight: bold;"></td>
+            <td class="noBorder"></td>
             <td class="noBorder" id="procBuy"></td>
             <td class="noBorder" id="procCell"></td>
         </tr>
@@ -119,18 +120,22 @@
         const table = document.getElementsByTagName("tr");
 
         function getData() {
+            const companyArr = [];
             const indexArr = [];
             const oldPriceArr = [];
             const newPriceArr = [];
             const weightArr = [];
+            const changePriceArr = [];
 
             let i = 1;
             while (i < table.length - 2) {
                 let weight = table[i].getElementsByTagName("input")[1].value;
                 if (weight) {
+                    companyArr.push(table[i].getElementsByTagName("input")[0].value);
                     let priceOld = table[i].getElementsByTagName("input")[2].value;
                     let priceNew = table[i].getElementsByTagName("input")[3].value;
                     let changePrice = (priceNew - priceOld) / priceOld * 100;
+                    changePriceArr.push(changePrice);
                     table[i].getElementsByTagName("td")[4].innerHTML = changePrice.toFixed(2) + '%';
                     let indexLocal = changePrice * (weight / 100);
                     indexArr.push(indexLocal);
@@ -195,7 +200,6 @@
                 document.querySelector("#ratio").style.color = "green";
             } else if (ratio < 0) {
                 document.querySelector("#ratio").style.color = "red";
-
             } else {
                 document.querySelector("#ratio").style.color = "black";
             }
@@ -208,12 +212,27 @@
             document.querySelector("#procCell").style.color = "red";
             document.querySelector("#data").innerHTML = String(Day > 9 ? Day : '0' + Day) + ' ' + String(Month > 9 ? Month : '0' + Month) + ' ' + String(Year);
 
-            // let input = document.querySelectorAll('input');
-            // let inputValue = [];
-            // for (let i = 0; i < input.length; i++) {
-            //     inputValue.push(input[i].value);
-            // }
+            let input = document.querySelectorAll('td');
+            let inputValue = [];
+            // console.log("Компании " + companyArr);
+            // console.log("Вес " + weightArr);
+            // console.log("Старвя цена " + oldPriceArr);
+            // console.log("Новая цена " + newPriceArr);
+            // console.log("Изменение котировки " + changePriceArr);
+            // console.log("Индекс " + indexArr);
 
+
+            let result = JSON.stringify({ companyArr, weightArr, oldPriceArr, newPriceArr, changePriceArr, indexArr });
+            let request = new XMLHttpRequest();
+            // посылаем запрос на адрес "/user"
+            request.open("POST", "/result", false);
+            request.setRequestHeader("Content-Type", "application/json");
+            request.send(result);
+            request.addEventListener("load", function () {
+                // получаем и парсим ответ сервера
+                let receivedUser = JSON.parse(request.response);
+                console.log(receivedUse);   // смотрим ответ сервера
+            });
         }
 
 
@@ -235,6 +254,7 @@
                     document.querySelector("#oldPriceSum").innerHTML = '';
                     document.querySelector("#newPriceSum").innerHTML = '';
                     i++;
+
                 }
             }
         }
