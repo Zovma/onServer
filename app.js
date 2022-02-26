@@ -19,5 +19,10 @@ app.get("/", function(request, response){
       
     response.sendFile(__dirname + "/formula.html");
 });
+
+app.get("/json", function(request, response){
+      
+    response.sendFile(__dirname + "/result.json");
+});
   
 app.listen(3000);

@@ -102,6 +102,11 @@
 
     <script>
 
+
+
+
+
+
         window.addEventListener('load', function (e) {
             createTable();
         });
@@ -272,6 +277,36 @@
                 let newTr = tr.cloneNode(true);
                 document.querySelector("tbody").appendChild(newTr);
             }
+
+            let request = new XMLHttpRequest();
+            // посылаем запрос на адрес "/user"
+            request.open("GET", "/json", true);
+            request.onload = () => {
+                if (request.status == 200) {                // если код ответа 200
+                    let obj = JSON.parse(request.responseText);
+                    let length = obj.weightArr.length;
+                    for (let i = 1; i < length + 1; i++) {
+                        table[i].getElementsByTagName("input")[0].value = obj.companyArr[i-1];
+                        table[i].getElementsByTagName("input")[1].value = obj.weightArr[i-1];
+                        table[i].getElementsByTagName("input")[2].value = obj.oldPriceArr[i-1].toFixed(2);
+                        table[i].getElementsByTagName("input")[3].value = obj.newPriceArr[i-1].toFixed(2);
+                        table[i].getElementsByTagName("td")[4].innerHTML = obj.changePriceArr[i-1].toFixed(2);
+                        if (obj.indexArr[i-1] >= 0) {
+                            table[i].getElementsByTagName("td")[5].innerHTML = obj.indexArr[i-1].toFixed(2);
+                        } else {
+                            table[i].getElementsByTagName("td")[6].innerHTML = obj.indexArr[i-1].toFixed(2);
+                        }
+                    }
+
+
+                    // выводим полученный ответ на консоль браузера
+                } else {                                // иначе выводим текст статуса
+                    console.log("Server response: ", request.statusText);
+                }
+            };
+            request.send();
+
+
         }
 
 
