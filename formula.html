@@ -101,12 +101,6 @@
     <button style="margin-left: 20%;" id="inHistory">Новые цены в старые</button>
 
     <script>
-
-
-
-
-
-
         window.addEventListener('load', function (e) {
             createTable();
         });
@@ -139,27 +133,27 @@
                     companyArr.push(table[i].getElementsByTagName("input")[0].value);
                     let priceOld = table[i].getElementsByTagName("input")[2].value;
                     let priceNew = table[i].getElementsByTagName("input")[3].value;
-                    let changePrice = (priceNew - priceOld) / priceOld * 100;
+                    let changePrice = Math.round10(((priceNew - priceOld) / priceOld * 100), -2);
                     changePriceArr.push(changePrice);
-                    table[i].getElementsByTagName("td")[4].innerHTML = changePrice.toFixed(2) + '%';
-                    let indexLocal = changePrice * (weight / 100);
+                    table[i].getElementsByTagName("td")[4].innerHTML = changePrice;
+                    let indexLocal = Math.round10(changePrice * (weight / 100), -2);
                     indexArr.push(indexLocal);
-                    oldPriceArr.push(priceOld * (weight / 100));
-                    newPriceArr.push(priceNew * (weight / 100));
+                    oldPriceArr.push(Math.round10(priceOld * (weight / 100), -2));
+                    newPriceArr.push(Math.round10(priceNew * (weight / 100), -2));
                     weightArr.push(weight);
                     if (indexLocal > 0) {
-                        table[i].getElementsByTagName("td")[5].innerHTML = indexLocal.toFixed(2);
+                        table[i].getElementsByTagName("td")[5].innerHTML = indexLocal;
                         table[i].getElementsByTagName("td")[5].style.color = "green";
                         table[i].getElementsByTagName("td")[5].style.fontWeight = "bold";
                         table[i].getElementsByTagName("td")[6].innerHTML = '';
 
                     } else if (indexLocal < 0) {
-                        table[i].getElementsByTagName("td")[6].innerHTML = indexLocal.toFixed(2);
+                        table[i].getElementsByTagName("td")[6].innerHTML = indexLocal;
                         table[i].getElementsByTagName("td")[6].style.fontWeight = "bold";
                         table[i].getElementsByTagName("td")[6].style.color = "red";
                         table[i].getElementsByTagName("td")[5].innerHTML = '';
                     } else {
-                        table[i].getElementsByTagName("td")[5].innerHTML = indexLocal.toFixed(2);
+                        table[i].getElementsByTagName("td")[5].innerHTML = indexLocal;
                         table[i].getElementsByTagName("td")[5].style.fontWeight = "normal";
                         table[i].getElementsByTagName("td")[5].style.color = "black";
                         table[i].getElementsByTagName("td")[6].innerHTML = '';
@@ -176,30 +170,30 @@
             }
 
 
-            let indexSumPlus = indexArr.filter(n => n >= 0).reduce(function (sum, num) { return sum + num }, 0);
-            let indexSumMinus = indexArr.filter(n => n < 0).reduce(function (sum, num) { return sum + num }, 0);
-            let weightSum = weightArr.reduce(function (sum, num) { return sum + Number(num) }, 0);
-            let oldPriceSum = oldPriceArr.reduce(function (sum, num) { return sum + Number(num) }, 0);
-            let newPriceSum = newPriceArr.reduce(function (sum, num) { return sum + Number(num) }, 0);
-            let ratio = (newPriceSum - oldPriceSum) / oldPriceSum * 100;
-            let oneProcIndex = (indexSumPlus + (indexSumMinus * -1)) / 100;
-            let procBuy = indexSumPlus / oneProcIndex;
-            let procCell = indexSumMinus / oneProcIndex == 0 ? 0 : indexSumMinus / oneProcIndex;
+            let indexSumPlus = Math.round10(indexArr.filter(n => n >= 0).reduce(function (sum, num) { return sum + num }, 0), -2);
+            let indexSumMinus = Math.round10(indexArr.filter(n => n < 0).reduce(function (sum, num) { return sum + num }, 0), -2);
+            let weightSum = Math.round10(weightArr.reduce(function (sum, num) { return sum + Number(num) }, 0), -2);
+            let oldPriceSum = Math.round10(oldPriceArr.reduce(function (sum, num) { return sum + Number(num) }, 0), -2);
+            let newPriceSum = Math.round10(newPriceArr.reduce(function (sum, num) { return sum + Number(num) }, 0), -2);
+            let ratio = Math.round10((newPriceSum - oldPriceSum) / oldPriceSum * 100, -2);
+            let oneProcIndex = Math.round10((indexSumPlus + (indexSumMinus * -1)) / 100, -2);
+            let procBuy = Math.round10(indexSumPlus / oneProcIndex, -2);
+            let procCell = Math.round10(indexSumMinus / oneProcIndex == 0 ? 0 : indexSumMinus / oneProcIndex, -2);
             let Data = new Date();
             let Year = Data.getFullYear();
             let Month = Data.getMonth();
             let Day = Data.getDate();
 
-            document.querySelector("#indexSumPlus").innerHTML = indexSumPlus.toFixed(2);
+            document.querySelector("#indexSumPlus").innerHTML = indexSumPlus;
             document.querySelector("#indexSumPlus").style.fontWeight = "bold";
             document.querySelector("#indexSumPlus").style.color = "green";
-            document.querySelector("#indexSumMinus").innerHTML = indexSumMinus.toFixed(2);
+            document.querySelector("#indexSumMinus").innerHTML = indexSumMinus;
             document.querySelector("#indexSumMinus").style.fontWeight = "bold";
             document.querySelector("#indexSumMinus").style.color = "red";
-            document.querySelector("#oldPriceSum").innerHTML = oldPriceSum.toFixed(2);
-            document.querySelector("#newPriceSum").innerHTML = newPriceSum.toFixed(2);
-            document.querySelector("#weightSum").innerHTML = weightSum.toFixed(2);
-            document.querySelector("#ratio").innerHTML = isNaN(ratio) ? 0 : ratio.toFixed(2) + '%';
+            document.querySelector("#oldPriceSum").innerHTML = oldPriceSum;
+            document.querySelector("#newPriceSum").innerHTML = newPriceSum;
+            document.querySelector("#weightSum").innerHTML = weightSum;
+            document.querySelector("#ratio").innerHTML = isNaN(ratio) ? 0 : ratio + '%';
 
             if (ratio > 0) {
                 document.querySelector("#ratio").style.color = "green";
@@ -209,10 +203,10 @@
                 document.querySelector("#ratio").style.color = "black";
             }
 
-            document.querySelector("#procBuy").innerHTML = isNaN(procBuy) ? 0 : procBuy.toFixed(2) + '%';
+            document.querySelector("#procBuy").innerHTML = isNaN(procBuy) ? 0 : procBuy + '%';
             document.querySelector("#procBuy").style.fontWeight = "bold";
             document.querySelector("#procBuy").style.color = "green";
-            document.querySelector("#procCell").innerHTML = isNaN(procCell) ? 0 : procCell.toFixed(2) + '%';
+            document.querySelector("#procCell").innerHTML = isNaN(procCell) ? 0 : procCell + '%';
             document.querySelector("#procCell").style.fontWeight = "bold";
             document.querySelector("#procCell").style.color = "red";
             document.querySelector("#data").innerHTML = String(Day > 9 ? Day : '0' + Day) + ' ' + String(Month > 9 ? Month : '0' + Month) + ' ' + String(Year);
@@ -288,13 +282,13 @@
                     for (let i = 1; i < length + 1; i++) {
                         table[i].getElementsByTagName("input")[0].value = obj.companyArr[i-1];
                         table[i].getElementsByTagName("input")[1].value = obj.weightArr[i-1];
-                        table[i].getElementsByTagName("input")[2].value = obj.oldPriceArr[i-1].toFixed(2);
-                        table[i].getElementsByTagName("input")[3].value = obj.newPriceArr[i-1].toFixed(2);
-                        table[i].getElementsByTagName("td")[4].innerHTML = obj.changePriceArr[i-1].toFixed(2);
+                        table[i].getElementsByTagName("input")[2].value = obj.oldPriceArr[i-1];
+                        table[i].getElementsByTagName("input")[3].value = obj.newPriceArr[i-1];
+                        table[i].getElementsByTagName("td")[4].innerHTML = obj.changePriceArr[i-1];
                         if (obj.indexArr[i-1] >= 0) {
-                            table[i].getElementsByTagName("td")[5].innerHTML = obj.indexArr[i-1].toFixed(2);
+                            table[i].getElementsByTagName("td")[5].innerHTML = obj.indexArr[i-1];
                         } else {
-                            table[i].getElementsByTagName("td")[6].innerHTML = obj.indexArr[i-1].toFixed(2);
+                            table[i].getElementsByTagName("td")[6].innerHTML = obj.indexArr[i-1];
                         }
                     }
 
@@ -306,8 +300,33 @@
             };
             request.send();
 
-
         }
+
+        function decimalAdjust(type, value, exp) {
+            // Если степень не определена, либо равна нулю...
+            if (typeof exp === 'undefined' || +exp === 0) {
+                return Math[type](value);
+            }
+            value = +value;
+            exp = +exp;
+            // Если значение не является числом, либо степень не является целым числом...
+            if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0)) {
+                return NaN;
+            }
+            // Сдвиг разрядов
+            value = value.toString().split('e');
+            value = Math[type](+(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp)));
+            // Обратный сдвиг
+            value = value.toString().split('e');
+            return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
+        }
+
+        if (!Math.round10) {
+            Math.round10 = function (value, exp) {
+                return decimalAdjust('round', value, exp);
+            };
+        }
+
 
 
     </script>
