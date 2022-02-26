@@ -180,7 +180,7 @@
             let ratio = Math.round10((newPriceSum - oldPriceSum) / oldPriceSum * 100, -2);
             let oneProcIndex = (indexSumPlus + (indexSumMinus * -1)) / 100;
             let procBuy = Math.round10(indexSumPlus / oneProcIndex, -2);
-            let procCell = 100 - procBuy == 0 ? 0 : 100 - procBuy;
+            let procCell = Math.round10(100 - procBuy == 0 ? 0 : 100 - procBuy, -2);
             let Data = new Date();
             let Year = Data.getFullYear();
             let Month = Data.getMonth();
