@@ -5,7 +5,6 @@ const app = express();
 const jsonParser = express.json();
   
 app.post("/result", jsonParser, function (request, response) {
-    console.log(request.body);
     // fs.writeFileSync("result.json", request);
     if(!request.body) return response.sendStatus(400);
     response.json(request.body); // отправляем пришедший ответ обратно
