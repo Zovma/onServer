@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Таблица 2</title>
 </head>
 
 <style>
@@ -55,7 +55,9 @@
     }
 </style>
 
+
 <body>
+    <h1>Таблица 2</h1>
     <table>
         <tr>
             <td class="noBorder">Компания</td>
@@ -226,7 +228,7 @@
             let request = new XMLHttpRequest();
 
             // посылаем запрос на адрес "/user"
-            request.open("POST", "/result", false);
+            request.open("POST", "/result2", false);
             request.setRequestHeader("Content-Type", "application/json");
             request.send(result);
             request.addEventListener("load", function () {
@@ -276,7 +278,7 @@
 
             let request = new XMLHttpRequest();
             // посылаем запрос на адрес "/user"
-            request.open("GET", "/json", true);
+            request.open("GET", "/result2", true);
             request.onload = () => {
                 if (request.status == 200) {
                     if (request.responseText) {                // если код ответа 200
@@ -329,10 +331,8 @@
                 return decimalAdjust('round', value, exp);
             };
         }
-
-
-
     </script>
+
 
 </body>
 
