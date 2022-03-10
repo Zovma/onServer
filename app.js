@@ -36,6 +36,20 @@ app.post("/avgTable", jsonParser, function (request, response) {
 
     fs.writeFileSync("avgTable.json", JSON.stringify(request.body));
 });
+app.post("/avgTable2", jsonParser, function (request, response) {
+    // console.log(request.body);
+    if (!request.body) return response.sendStatus(400);
+    response.json(request.body); // отправляем пришедший ответ обратно
+
+    fs.writeFileSync("avgTable2.json", JSON.stringify(request.body));
+});
+app.post("/avgTable3", jsonParser, function (request, response) {
+    // console.log(request.body);
+    if (!request.body) return response.sendStatus(400);
+    response.json(request.body); // отправляем пришедший ответ обратно
+
+    fs.writeFileSync("avgTable3.json", JSON.stringify(request.body));
+});
 
 app.get("/table1", function (request, response) {
 
@@ -54,6 +68,14 @@ app.get("/table3", function (request, response) {
 app.get("/avgTable", function (request, response) {
 
     response.sendFile(__dirname + "/avgTable.html");
+});
+app.get("/avgTable2", function (request, response) {
+
+    response.sendFile(__dirname + "/avgTable2.html");
+});
+app.get("/avgTable3", function (request, response) {
+
+    response.sendFile(__dirname + "/avgTable3.html");
 });
 
 
@@ -77,10 +99,14 @@ app.get("/avgTableJson", function (request, response) {
 
     response.sendFile(__dirname + "/avgTable.json");
 });
+app.get("/avgTableJson2", function (request, response) {
 
+    response.sendFile(__dirname + "/avgTable2.json");
+});
+app.get("/avgTableJson3", function (request, response) {
 
-
-
+    response.sendFile(__dirname + "/avgTable3.json");
+});
 
 
 app.listen(3000);
