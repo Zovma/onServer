@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    table {
+        width: 90%;
+        max-width: 400px;
+        table-layout: fixed;
+        margin: 0 5% 0 5%;
+        background: white;
+        border-collapse: collapse
+    }
+
+
+    input {
+        border: 0;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+    }
+
+
+
+    td {
+        width: 25px;
+        height: 25px;
+        border: 0.5px solid black;
+        text-align: center;
+
+    }
+
+    .noBorder {
+        border: 0;
+    }
+
+    .green {
+        color: green;
+        font-weight: bold;
+    }
+
+    .red {
+        color: red;
+        font-weight: bold;
+    }
+</style>
+
+
+<body>
+    <h1>Таблица средней цены № 2</h1>
+    <table>
+        <tr>
+            <td class="noBorder">Дата</td>
+            <td class="noBorder">Цена</td>
+        <tr>
+            <td><input type="text"></td>
+            <td><input type="text"></td>
+    </table>
+    <table>
+        <tr>
+            <td id="number" class="noBorder"></td>
+            <td id="result" class="noBorder"></td>
+        </tr>
+    </table>
+
+    <button style="margin: 0 0 2% 5%;" id="click">Click to me</button>
+
+    <script>
+        window.addEventListener('load', function (e) {
+            createTable();
+        });
+
+        let add = document.getElementById("click");
+        // let inHisori = document.getElementById("inHistory");
+
+        add.addEventListener("click", function (e) {
+            getData();
+        });
+
+        // inHisori.addEventListener("click", function (e) {
+        //     changeHistory();
+        // });
+
+        const table = document.getElementsByTagName("tr");
+
+        function getData() {
+            const prices = [];
+            const dates = [];
+
+            let i = 1;
+            while (i < table.length - 1) {
+                let date = table[i].getElementsByTagName("input")[0].value;
+                if (date) {
+                    let price = table[i].getElementsByTagName("input")[1].value;
+                    prices.push(Number(price));
+                    dates.push(date);
+                } else {
+                    table[i].getElementsByTagName("input")[1].value = '';
+                }
+                i++;
+            }
+
+            let sum = prices.reduce(function (sum, num) { return sum + num });
+            let average = sum / prices.length;
+
+            document.querySelector("#number").innerHTML = prices.length;
+            document.querySelector("#result").innerHTML = Math.round10(average, -2);
+
+            let result = JSON.stringify({ dates, prices });
+            let request = new XMLHttpRequest();
+            // посылаем запрос на адрес "/user"
+            request.open("POST", "/avgTable2", false);
+            request.setRequestHeader("Content-Type", "application/json");
+            request.send(result);
+            request.addEventListener("load", function () {
+                // получаем и парсим ответ сервера
+                let receivedUser = JSON.parse(request.response);
+                console.log(receivedUse);   // смотрим ответ сервера
+            });
+        }
+
+
+        function createTable() {
+            let numberOfLines = prompt("Какое желаете количество строк, Сударь?");
+
+
+            for (let i = 1; i < numberOfLines; i++) {
+                create()
+            }
+
+            function create() {
+                let tr = document.querySelector("tbody").querySelectorAll("tr")[1];
+                let newTr = tr.cloneNode(true);
+                document.querySelector("tbody").appendChild(newTr);
+            }
+
+            let request = new XMLHttpRequest();
+            // посылаем запрос на адрес "/user"
+            request.open("GET", "/avgTableJson2", true);
+            request.onload = () => {
+                if (request.status == 200) {
+                    if (request.responseText) {                // если код ответа 200
+                        let obj = JSON.parse(request.responseText);
+                        let length = obj.dates.length;
+                        for (let i = 1; i < length + 1; i++) {
+                            table[i].getElementsByTagName("input")[0].value = obj.dates[i - 1];
+                            table[i].getElementsByTagName("input")[1].value = obj.prices[i - 1];
+                        }
+
+                    }
+                    // выводим полученный ответ на консоль браузера
+                } else {                                // иначе выводим текст статуса
+                    console.log("Server response: ", request.statusText);
+                }
+            };
+            request.send();
+
+        }
+
+        function decimalAdjust(type, value, exp) {
+            // Если степень не определена, либо равна нулю...
+            if (typeof exp === 'undefined' || +exp === 0) {
+                return Math[type](value);
+            }
+            value = +value;
+            exp = +exp;
+            // Если значение не является числом, либо степень не является целым числом...
+            if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0)) {
+                return NaN;
+            }
+            // Сдвиг разрядов
+            value = value.toString().split('e');
+            value = Math[type](+(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp)));
+            // Обратный сдвиг
+            value = value.toString().split('e');
+            return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
+        }
+
+        if (!Math.round10) {
+            Math.round10 = function (value, exp) {
+                return decimalAdjust('round', value, exp);
+            };
+        }
+    </script>
+
+
+</body>
+
+</html>
