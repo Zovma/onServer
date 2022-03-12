@@ -162,6 +162,7 @@ function logic() {
             } else if (result[5][0] == 'Не важно где пройдет встреча') {
                 state = 'useMitingProductPresentationNoMatterWhere'
             }
+            break;
 
         case 'useMitingPickUp':
             if (result[4][0] == 'Offline') {
@@ -323,7 +324,7 @@ function createElements() {
             useMitingProductPresentationNoMatterWhere();
             break;
         case 'sendingCommercialOffer':
-            historyRecord('useMitingProductPresentationNoMatterWhere');
+            historyRecord('sendingCommercialOffer');
             sendingCommercialOffer();
             break;
         case 'finish':
