@@ -84,12 +84,6 @@ app.post("/avgTable7", jsonParser, function (request, response) {
 });
 
 
-app.get("/script", function (request, response) {
-
-    response.sendFile(__dirname + "/script.html");
-});
-
-
 
 app.get("/table1", function (request, response) {
 
