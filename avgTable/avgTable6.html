@@ -41,12 +41,32 @@
 
     }
 
+    #click {
+        margin: 0 0 2% 5%;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    #click:hover {
+        background-color: rgb(64, 224, 150);
+    }
+
+    #clean {
+        margin: 0 0 0 30%;
+        border-radius: 5px;
+    }
+
+    #clean:hover {
+        background-color: red;
+    }
+
     .noBorder {
         border: 0;
+
     }
 
     .green {
-        color: green;
+        color: rgb(60, 228, 60);
         font-weight: bold;
     }
 
@@ -74,7 +94,9 @@
         </tr>
     </table>
 
-    <button style="margin: 0 0 2% 5%;" id="click">Click to me</button>
+    <button id="click">Посчитать и сохранить</button>
+    <button id="clean">Стереть всё</button>
+
 
     <script>
         window.addEventListener('load', function (e) {
@@ -82,11 +104,16 @@
         });
 
         let add = document.getElementById("click");
+        let clean = document.getElementById("clean");
         // let inHisori = document.getElementById("inHistory");
 
         add.addEventListener("click", function (e) {
             getData();
         });
+
+        clean.addEventListener("click", function () {
+            cleanAll();
+        })
 
         // inHisori.addEventListener("click", function (e) {
         //     changeHistory();
@@ -120,7 +147,7 @@
             let result = JSON.stringify({ dates, prices });
             let request = new XMLHttpRequest();
             // посылаем запрос на адрес "/user"
-            request.open("POST", "/avgTable6", false);
+            request.open("POST", "/avgTable", false);
             request.setRequestHeader("Content-Type", "application/json");
             request.send(result);
             request.addEventListener("load", function () {
@@ -128,6 +155,23 @@
                 let receivedUser = JSON.parse(request.response);
                 console.log(receivedUse);   // смотрим ответ сервера
             });
+        }
+
+        function cleanAll() {
+            let result = confirm("Переместить все новые цены в старые?");
+            if (result) {
+                let arrInput = document.querySelectorAll('input')
+
+                for (let i = 0; i < arrInput.length; i++) {
+                    arrInput[i].value = '';
+                }
+
+                document.querySelector('#number').innerHTML = '';
+                document.querySelector('#result').innerHTML = '';
+
+            }
+
+
         }
 
 
@@ -147,7 +191,7 @@
 
             let request = new XMLHttpRequest();
             // посылаем запрос на адрес "/user"
-            request.open("GET", "/avgTableJson6", true);
+            request.open("GET", "/avgTableJson", true);
             request.onload = () => {
                 if (request.status == 200) {
                     if (request.responseText) {                // если код ответа 200
