@@ -2,7 +2,6 @@ const express = require("express");
 const fs = require("fs");
 const app = express();
 const path = require('path');
-const createSample = require("./saleScript/createSample.js")
 // создаем парсер для данных в формате json
 const jsonParser = express.json();
 
