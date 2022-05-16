@@ -195,21 +195,21 @@ app.get("/avgTableJson7", function (request, response) {
 
 //Скрипт продаж
 
-app.use(express.static(path.join(__dirname + '/saleScript/', 'build')));
+// app.use(express.static(path.join(__dirname + '/saleScript/', 'build')));
 
-app.get('/script', function (req, res) {
-    res.sendFile(path.join(__dirname + '/saleScript/', 'build', 'index.html'));
-});
+// app.get('/script', function (req, res) {
+//     res.sendFile(path.join(__dirname + '/saleScript/', 'build', 'index.html'));
+// });
 
-app.post("/dataScript", jsonParser, function (request, response) {
-    console.log('Пришёл post');
-    if (!request.body) return response.sendStatus(400);
-    response.json(request.body); // отправляем пришедший ответ обратно
-    const dataScript = request.body;
-    // console.log(dataScript);
-    createSample(dataScript);
+// app.post("/dataScript", jsonParser, function (request, response) {
+//     console.log('Пришёл post');
+//     if (!request.body) return response.sendStatus(400);
+//     response.json(request.body); // отправляем пришедший ответ обратно
+//     const dataScript = request.body;
+//     // console.log(dataScript);
+//     createSample(dataScript);
 
-});
+// });
 
 
 app.listen(3000);
